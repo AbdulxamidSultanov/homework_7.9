@@ -1,25 +1,18 @@
-import { useEffect } from "react";
-import { useDispatch } from "react-redux";
-import { setError, setLoader } from "./lib/slices/productsSlice";
-
+import { Route, Routes } from "react-router-dom";
+import { Header, Home, PostModal } from "./components";
+import { useSelector } from "react-redux";
 function App() {
-  const dispatch = useDispatch();
-  useEffect(() => {
-    const getProducts = async () => {
-      dispatch(setLoader(true));
-      try {
-        const res = await fetch("https://dummyjson.com/products");
-        const data = await res.json();
-        console.log(data);
-      } catch (error) {
-        dispatch(setError(error));
-      } finally {
-        dispatch(setLoader(false));
-      }
-    };
-    getProducts()
-  }, []);
-  return <></>;
+  const { isModal } = useSelector((state) => state.post);
+
+  return (
+    <div className="container w-full mx-auto">
+      {isModal != false && <PostModal />}
+      <Header />
+      <Routes>
+        <Route path="/" element={<Home />} />
+      </Routes>
+    </div>
+  );
 }
 
 export default App;
